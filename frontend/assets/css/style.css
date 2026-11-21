@@ -55,6 +55,7 @@
     --space-6: 2rem;     /* 32px */
     --space-8: 3rem;     /* 48px */
     --space-10: 4rem;    /* 64px */
+    --space-12: 5rem;    /* 80px */
     
     /* Border Radius */
     --radius-sm: 0.375rem;  /* 6px */
@@ -497,6 +498,27 @@ p {
 .btn-tertiary:hover {
     background: var(--color-bg-tertiary);
     color: var(--color-text-primary);
+}
+
+.btn-success {
+    background: var(--color-success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-success:active {
+    transform: translateY(0);
+}
+
+.btn-success:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
 /* Error Messages */

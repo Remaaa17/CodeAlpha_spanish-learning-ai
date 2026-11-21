@@ -8,17 +8,18 @@ let quizAnswers = [];
 let currentPath = null;
 
 // Tab switching
-function switchTab(tabName) {
+function switchTab(tabName, btn) {
     document.querySelectorAll('.content').forEach(content => {
         content.classList.remove('active');
     });
     
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.classList.remove('active');
+    document.querySelectorAll('.tab-button').forEach(b => {
+        b.classList.remove('active');
     });
     
     document.getElementById(tabName).classList.add('active');
-    event.target.classList.add('active');
+    // Use passed btn reference; fall back to event.currentTarget for inline callers
+    (btn || event.currentTarget).classList.add('active');
     
     // Load data for specific tabs
     if (tabName === 'flashcards') {
@@ -29,6 +30,9 @@ function switchTab(tabName) {
         loadPathsProgress();
     }
 }
+
+// Update onclick in HTML to pass `this`: onclick="switchTab('translator', this)"
+// The nav buttons in index.html call switchTab — we handle both cases above.
 
 // ============================================
 // TRANSLATION FUNCTIONS
@@ -44,12 +48,15 @@ function swapLanguages() {
     sourceLang.value = targetLang.value;
     targetLang.value = temp;
     
+    const PLACEHOLDER = 'Translation will appear here';
+    const currentTranslation = translatedText.textContent.trim();
     const tempText = sourceText.value;
-    sourceText.value = translatedText.textContent !== 'Translation will appear here...' 
-        ? translatedText.textContent 
-        : '';
+
+    sourceText.value = (currentTranslation === PLACEHOLDER || currentTranslation === PLACEHOLDER + '...')
+        ? ''
+        : currentTranslation;
     
-    if (translatedText.textContent !== 'Translation will appear here...') {
+    if (currentTranslation !== PLACEHOLDER && currentTranslation !== PLACEHOLDER + '...') {
         translatedText.innerHTML = `<p>${tempText}</p>`;
     }
 }
@@ -101,7 +108,7 @@ async function translateText() {
 function copyTranslation() {
     const translatedText = document.getElementById('translatedText').textContent;
     navigator.clipboard.writeText(translatedText);
-    alert('Translation copied to clipboard!');
+    showNotification('Translation copied to clipboard!', 'success');
 }
 
 function speakTranslation() {
@@ -226,13 +233,18 @@ async function loadFlashcards(category) {
     });
     event.target.classList.add('active');
     
+    // Store the selected category on the button for use by startFlashcardPractice
+    document.querySelectorAll('.category-btn').forEach(btn => btn.removeAttribute('data-selected'));
+    event.target.setAttribute('data-selected', 'true');
+
     document.getElementById('flashcardStart').style.display = 'flex';
     document.getElementById('flashcardDisplay').style.display = 'none';
 }
 
 async function startFlashcardPractice() {
-    const activeCategory = document.querySelector('.category-btn.active').textContent;
-    const category = activeCategory === 'All' ? null : activeCategory.toLowerCase();
+    const activeBtn = document.querySelector('.category-btn.active');
+    const activeCategory = activeBtn ? activeBtn.textContent.trim() : 'All Categories';
+    const category = activeCategory === 'All Categories' ? null : activeCategory.toLowerCase();
     
     try {
         const url = `/api/flashcard/practice?user_id=${currentUser}&count=10${category ? '&category=' + category : ''}`;
@@ -246,7 +258,7 @@ async function startFlashcardPractice() {
             document.getElementById('flashcardDisplay').style.display = 'block';
             showFlashcard();
         } else {
-            alert('No flashcards available. Try a different category!');
+            showNotification('No flashcards available. Try a different category!', 'info');
         }
     } catch (error) {
         console.error('Error loading flashcards:', error);
@@ -257,7 +269,7 @@ async function startFlashcardPractice() {
 function showFlashcard() {
     if (currentFlashcardIndex >= flashcardSession.length) {
         // Session complete
-        alert('Practice session complete! Great job! 🎉');
+        showNotification('Practice session complete! Great job! 🎉', 'success');
         document.getElementById('flashcardDisplay').style.display = 'none';
         document.getElementById('flashcardStart').style.display = 'flex';
         loadFlashcardStats();
@@ -423,9 +435,12 @@ function showQuizResults(results) {
 }
 
 function retakeQuiz() {
-    startQuiz(quizData.quiz_type);
+    const quizType = quizData.quiz_type; // capture before reset
+    currentQuizQuestion = 0;
+    quizAnswers = [];
     document.getElementById('quizResults').style.display = 'none';
     document.getElementById('quizPlaying').style.display = 'block';
+    startQuiz(quizType);
 }
 
 function backToQuizSelection() {
@@ -517,7 +532,7 @@ async function completeLesson(lessonId) {
         const data = await response.json();
         
         if (data.success) {
-            alert('Lesson completed! 🎉');
+            showNotification('Lesson completed! 🎉', 'success');
             selectPath(currentPath); // Reload
         }
     } catch (error) {

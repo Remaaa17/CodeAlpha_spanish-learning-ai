@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 from backend.services.deep_sort_tracker import DeepSORTTracker
-from backend.services.translation_service import TranslationService
+from backend.services.translation_service import translate_text
 from backend.models.database import get_db
 import time
 from datetime import datetime
@@ -37,9 +37,6 @@ class VisualLearningService:
             iou_threshold=0.3  # IOU threshold for matching
         )
         
-        # Translation service
-        self.translator = TranslationService()
-        
         # Cache for translations (avoid repeated API calls)
         self.translation_cache = {}
         
@@ -66,12 +63,11 @@ class VisualLearningService:
         
         # Translate
         try:
-            result = self.translator.translate(
+            spanish_word = translate_text(
                 text=english_word,
                 source_lang='en',
                 target_lang='es'
             )
-            spanish_word = result['translated_text']
             
             # Cache the translation
             self.translation_cache[english_word] = spanish_word

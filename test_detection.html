@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Visual Detection</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        video, canvas, img { max-width: 640px; display: block; margin: 10px 0; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+        .error { color: red; }
+        .success { color: green; }
+        #log { background: #f5f5f5; padding: 10px; margin-top: 20px; max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>Visual Detection Test</h1>
+    
+    <button onclick="startWebcam()">Start Webcam</button>
+    <button onclick="stopWebcam()">Stop Webcam</button>
+    <button onclick="captureAndDetect()">Capture & Detect</button>
+    <button onclick="uploadTest()">Upload Image</button>
+    
+    <br><br>
+    
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <img id="result" style="display: none;" />
+    
+    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileUpload()" />
+    
+    <div id="log"></div>
+    
+    <script>
+        let stream = null;
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : '';
+            logDiv.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        async function startWebcam() {
+            try {
+                log('Starting webcam...');
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: 640, height: 480 } 
+                });
+                document.getElementById('video').srcObject = stream;
+                log('Webcam started successfully', 'success');
+            } catch (error) {
+                log('Webcam error: ' + error.message, 'error');
+            }
+        }
+        
+        function stopWebcam() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                document.getElementById('video').srcObject = null;
+                log('Webcam stopped');
+            }
+        }
+        
+        async function captureAndDetect() {
+            try {
+                const video = document.getElementById('video');
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                if (!stream) {
+                    throw new Error('Webcam not started');
+                }
+                
+                // Set canvas size
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                log(`Canvas size: ${canvas.width}x${canvas.height}`);
+                
+                // Draw frame
+                ctx.drawImage(video, 0, 0);
+                
+                // Convert to base64
+                const imageData = canvas.toDataURL('image/jpeg', 0.8);
+                log(`Image data length: ${imageData.length} chars`);
+                log(`First 50 chars: ${imageData.substring(0, 50)}`);
+                
+                // Send to API
+                await detectObjects(imageData);
+                
+            } catch (error) {
+                log('Capture error: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+        
+        function uploadTest() {
+            document.getElementById('fileInput').click();
+        }
+        
+        async function handleFileUpload() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const imageData = e.target.result;
+                log(`Uploaded file: ${file.name}, size: ${file.size} bytes`);
+                log(`Image data length: ${imageData.length} chars`);
+                await detectObjects(imageData);
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        async function detectObjects(imageData) {
+            try {
+                log('Sending detection request...');
+                
+                const response = await fetch('http://localhost:5000/api/visual/detect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image: imageData,
+                        confidence: 0.5
+                    })
+                });
+                
+                log(`Response status: ${response.status}`);
+                
+                const data = await response.json();
+                log('Response data: ' + JSON.stringify(data));
+                
+                if (data.success) {
+                    document.getElementById('result').src = data.image;
+                    document.getElementById('result').style.display = 'block';
+                    log(`SUCCESS: Detected ${data.count} objects`, 'success');
+                    log('Detections: ' + JSON.stringify(data.detections, null, 2));
+                } else {
+                    log('Detection failed: ' + data.error, 'error');
+                }
+                
+            } catch (error) {
+                log('API error: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

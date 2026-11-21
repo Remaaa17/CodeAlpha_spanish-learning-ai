@@ -37,12 +37,21 @@ def detect_objects():
             return jsonify({'error': 'No image provided'}), 400
         
         # Decode base64 image
-        img_bytes = base64.b64decode(image_data.split(',')[1] if ',' in image_data else image_data)
-        nparr = np.frombuffer(img_bytes, np.uint8)
-        frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        
-        if frame is None:
-            return jsonify({'error': 'Invalid image'}), 400
+        try:
+            # Remove data URL prefix if present
+            if ',' in image_data:
+                image_data = image_data.split(',')[1]
+            
+            # Decode base64
+            img_bytes = base64.b64decode(image_data)
+            nparr = np.frombuffer(img_bytes, np.uint8)
+            frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            
+            if frame is None or frame.size == 0:
+                return jsonify({'error': 'Invalid image format or corrupted data'}), 400
+                
+        except Exception as decode_error:
+            return jsonify({'error': f'Image decoding failed: {str(decode_error)}'}), 400
         
         # Detect objects
         service = get_service()
@@ -60,6 +69,9 @@ def detect_objects():
         })
     
     except Exception as e:
+        import traceback
+        print(f"Detection error: {str(e)}")
+        print(traceback.format_exc())
         return jsonify({'error': str(e)}), 500
 
 

@@ -13,7 +13,7 @@ DATABASE_PATH = os.path.join(BASE_DIR, 'spanish_learning.db')
 
 # Flask settings
 FLASK_ENV = os.getenv('FLASK_ENV', 'development')
-DEBUG = FLASK_ENV == 'development'
+DEBUG = False  # Disable debug mode to prevent auto-reload issues
 SECRET_KEY = os.getenv('SECRET_KEY', 'spanish-learning-secret-key-change-in-production')
 
 # API Keys (use environment variables)
