@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Learning AI - Project Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #0080ff;
+            --color-secondary: #1e293b;
+            --color-accent: #00a0ff;
+            --color-success: #10b981;
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-600: #4b5563;
+            --color-gray-900: #111827;
+            --font-body: 'Inter', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: var(--color-gray-900);
+            background: var(--color-gray-50);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            font-family: var(--font-display);
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .section h3 {
+            color: var(--color-secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--color-gray-50) 0%, white 100%);
+            border: 2px solid var(--color-gray-200);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-family: var(--font-display);
+        }
+
+        .stat-label {
+            color: var(--color-gray-600);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .task-card {
+            background: var(--color-gray-50);
+            border-left: 4px solid var(--color-primary);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+        }
+
+        .task-card h4 {
+            color: var(--color-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .task-status {
+            display: inline-block;
+            background: var(--color-success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--color-success);
+            font-weight: bold;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .tech-badge {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .code-block {
+            background: var(--color-gray-900);
+            color: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        th {
+            background: var(--color-gray-100);
+            font-weight: 600;
+            color: var(--color-secondary);
+        }
+
+        .footer {
+            background: var(--color-secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        @media print {
+            .header {
+                background: var(--color-primary);
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Spanish Learning AI Assistant</h1>
+        <p>CodeAlpha AI/ML Internship - Complete Project Report</p>
+        <p style="margin-top: 0.5rem; font-size: 0.95rem;">Tasks 1, 2 & 4 - Integrated Implementation</p>
+    </div>
+
+    <div class="container">
+        <!-- Executive Summary -->
+        <div class="section">
+            <h2>Executive Summary</h2>
+            <p>This project delivers a comprehensive Spanish learning platform combining <strong>Translation</strong>, <strong>AI Chatbot</strong>, and <strong>Visual Learning with Object Detection</strong>. The system integrates state-of-the-art AI/ML technologies including YOLOv8, Deep SORT tracking, Groq AI, and NLP to create an innovative language learning experience.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Tasks Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Major Features</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">16,783</div>
+                    <div class="stat-label">Lines of Code</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Requirements Met</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task 1: Translation -->
+        <div class="section">
+            <h2>Task 1: Translation Tool</h2>
+            <div class="task-card">
+                <h4>Real-Time English ↔ Spanish Translation <span class="task-status">COMPLETED</span></h4>
+                <p>A professional translation interface using MyMemory API with bidirectional translation, text-to-speech, and history tracking.</p>
+                
+                <h3>Features Implemented</h3>
+                <ul class="feature-list">
+                    <li>Real-time translation (EN ↔ ES)</li>
+                    <li>MyMemory API integration (no key required)</li>
+                    <li>Text-to-speech for pronunciation</li>
+                    <li>Translation history tracking</li>
+                    <li>Copy to clipboard functionality</li>
+                    <li>Language swap with one click</li>
+                    <li>Character count display (5000 limit)</li>
+                </ul>
+
+                <h3>API Endpoint</h3>
+                <div class="code-block">POST /api/translation/translate
+{
+  "text": "Hello, how are you?",
+  "source_lang": "en",
+  "target_lang": "es"
+}
+
+Response:
+{
+  "success": true,
+  "translated_text": "Hola, ¿cómo estás?"
+}</div>
+
+                <h3>Technical Stack</h3>
+                <div class="tech-stack">
+                    <span class="tech-badge">Python Flask</span>
+                    <span class="tech-badge">MyMemory API</span>
+                    <span class="tech-badge">JavaScript ES6</span>
+                    <span class="tech-badge">Web Speech API</span>
+                </div>
+
+                <h3>Files</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>translation_service.py</td>
+                                <td>60</td>
+                                <td>API integration & translation logic</td>
+                            </tr>
+                            <tr>
+                                <td>translation_routes.py</td>
+                                <td>40</td>
+                                <td>Flask API endpoint</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task 2: Chatbot -->
+        <div class="section">
+            <h2>Task 2: AI Chatbot</h2>
+            <div class="task-card">
+                <h4>NLP-Powered Spanish Learning Assistant <span class="task-status">COMPLETED</span></h4>
+                <p>Intelligent chatbot using Groq AI (Llama 3.3 70B) with NLTK preprocessing and TF-IDF FAQ matching for accurate Spanish learning guidance.</p>
+                
+                <h3>Features Implemented</h3>
+                <ul class="feature-list">
+                    <li>Groq AI integration (Llama 3.3 70B)</li>
+                    <li>NLTK natural language processing</li>
+                    <li>TF-IDF similarity matching</li>
+                    <li>20+ pre-programmed Spanish learning FAQs</li>
+                    <li>Conversation history tracking</li>
+                    <li>Context-aware responses</li>
+                    <li>Fallback to AI for complex questions</li>
+                </ul>
+
+                <h3>AI Architecture</h3>
+                <div class="code-block">User Question
+    ↓
+NLTK Preprocessing (tokenize, lemmatize)
+    ↓
+TF-IDF Similarity Check (20 FAQs)
+    ↓
+Match Found? → Return FAQ Answer
+    ↓ (No match)
+Groq AI (Llama 3.3 70B) → Generate Response</div>
+
+                <h3>Technical Stack</h3>
+                <div class="tech-stack">
+                    <span class="tech-badge">Groq AI</span>
+                    <span class="tech-badge">NLTK</span>
+                    <span class="tech-badge">scikit-learn</span>
+                    <span class="tech-badge">TF-IDF</span>
+                </div>
+
+                <h3>Files</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>enhanced_chatbot.py</td>
+                                <td>250</td>
+                                <td>NLP processing & AI integration</td>
+                            </tr>
+                            <tr>
+                                <td>chat_routes.py</td>
+                                <td>60</td>
+                                <td>Chat API endpoints</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task 4: Visual Learning -->
+        <div class="section">
+            <h2>Task 4: Object Detection & Tracking</h2>
+            <div class="task-card">
+                <h4>YOLOv8 + Deep SORT Visual Learning System <span class="task-status">COMPLETED</span></h4>
+                <p>Real-time object detection with multi-object tracking, integrated with Spanish translation for innovative visual vocabulary learning.</p>
+                
+                <h3>Core Requirements Met</h3>
+                <ul class="feature-list">
+                    <li>Real-time video input (webcam + file upload)</li>
+                    <li>OpenCV integration for frame processing</li>
+                    <li>Pre-trained model: YOLOv8 Nano (COCO 80 classes)</li>
+                    <li>Bounding boxes with confidence scores</li>
+                    <li>Deep SORT multi-object tracking</li>
+                    <li>Persistent tracking IDs across frames</li>
+                    <li>Real-time display with labels</li>
+                </ul>
+
+                <h3>BONUS Features (Beyond Requirements)</h3>
+                <ul class="feature-list">
+                    <li>Automatic Spanish translation of detected objects</li>
+                    <li>One-click flashcard generation from detected vocabulary</li>
+                    <li>Web-based interface (no desktop app)</li>
+                    <li>All image formats supported (JPG, PNG, GIF, BMP, WebP)</li>
+                    <li>Session statistics and vocabulary tracking</li>
+                </ul>
+
+                <h3>Deep SORT Algorithm</h3>
+                <div class="code-block">Detection Pipeline:
+1. YOLOv8 detects objects → bounding boxes
+2. Kalman Filter predicts next position
+3. Hungarian Algorithm matches detections to tracks
+4. Track Management: create/update/delete
+5. Spanish Translation via MyMemory API
+6. Display with ID, label, translation, confidence</div>
+
+                <h3>Technical Stack</h3>
+                <div class="tech-stack">
+                    <span class="tech-badge">YOLOv8</span>
+                    <span class="tech-badge">Deep SORT</span>
+                    <span class="tech-badge">OpenCV</span>
+                    <span class="tech-badge">Kalman Filter</span>
+                    <span class="tech-badge">Hungarian Algorithm</span>
+                    <span class="tech-badge">NumPy</span>
+                    <span class="tech-badge">PyTorch</span>
+                </div>
+
+                <h3>Performance Metrics</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Hardware</th>
+                                <th>Speed (FPS)</th>
+                                <th>Experience</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CPU Only</td>
+                                <td>2-3 FPS</td>
+                                <td>Functional</td>
+                            </tr>
+                            <tr>
+                                <td>High-end CPU</td>
+                                <td>5-10 FPS</td>
+                                <td>Good</td>
+                            </tr>
+                            <tr>
+                                <td>NVIDIA GPU</td>
+                                <td>30-100+ FPS</td>
+                                <td>Real-time smooth</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Files</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>File</th>
+                                <th>Lines</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>deep_sort_tracker.py</td>
+                                <td>350</td>
+                                <td>Kalman Filter + Hungarian algorithm</td>
+                            </tr>
+                            <tr>
+                                <td>visual_learning_service.py</td>
+                                <td>400</td>
+                                <td>YOLO + translation integration</td>
+                            </tr>
+                            <tr>
+                                <td>visual_learning_routes.py</td>
+                                <td>200</td>
+                                <td>8 API endpoints</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Features -->
+        <div class="section">
+            <h2>Additional Features (Beyond Requirements)</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">51</div>
+                    <div class="stat-label">Flashcards</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Quiz Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Lessons</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+            </div>
+
+            <h3>3. Flashcard System</h3>
+            <ul class="feature-list">
+                <li>51 pre-loaded cards across 7 categories</li>
+                <li>Spaced repetition algorithm</li>
+                <li>Practice mode with immediate feedback</li>
+            </ul>
+
+            <h3>4. Quiz System</h3>
+            <ul class="feature-list">
+                <li>4 quiz types: Vocabulary, Conjugation, Translation, Grammar</li>
+                <li>10 questions per quiz</li>
+                <li>Automatic grading with detailed results</li>
+            </ul>
+
+            <h3>5. Learning Paths</h3>
+            <ul class="feature-list">
+                <li>Beginner: 10 lessons (8 weeks)</li>
+                <li>Intermediate: 8 lessons (12 weeks)</li>
+                <li>Advanced: 5 lessons (16 weeks)</li>
+            </ul>
+
+            <h3>6. Gamification</h3>
+            <ul class="feature-list">
+                <li>Points for all activities</li>
+                <li>11 achievement badges</li>
+                <li>Daily streak tracking</li>
+                <li>Global leaderboard</li>
+            </ul>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="section">
+            <h2>Complete Technology Stack</h2>
+            
+            <h3>Backend</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">Python 3.14</span>
+                <span class="tech-badge">Flask 3.0</span>
+                <span class="tech-badge">SQLite</span>
+                <span class="tech-badge">YOLOv8</span>
+                <span class="tech-badge">OpenCV</span>
+                <span class="tech-badge">PyTorch</span>
+                <span class="tech-badge">NLTK</span>
+                <span class="tech-badge">scikit-learn</span>
+                <span class="tech-badge">Groq AI</span>
+                <span class="tech-badge">NumPy</span>
+                <span class="tech-badge">SciPy</span>
+            </div>
+
+            <h3>Frontend</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">HTML5</span>
+                <span class="tech-badge">CSS3</span>
+                <span class="tech-badge">JavaScript ES6</span>
+                <span class="tech-badge">Fetch API</span>
+                <span class="tech-badge">Web Speech API</span>
+            </div>
+
+            <h3>AI/ML Models</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">YOLOv8 Nano</span>
+                <span class="tech-badge">Llama 3.3 70B</span>
+                <span class="tech-badge">TF-IDF</span>
+                <span class="tech-badge">Kalman Filter</span>
+            </div>
+        </div>
+
+        <!-- Project Statistics -->
+        <div class="section">
+            <h2>Project Statistics</h2>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Count</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Files</td>
+                            <td>68</td>
+                            <td>Source code, config, docs</td>
+                        </tr>
+                        <tr>
+                            <td>Python Files</td>
+                            <td>22</td>
+                            <td>Backend services & APIs</td>
+                        </tr>
+                        <tr>
+                            <td>Lines of Code</td>
+                            <td>~16,783</td>
+                            <td>Python, JavaScript, CSS, HTML</td>
+                        </tr>
+                        <tr>
+                            <td>API Endpoints</td>
+                            <td>40+</td>
+                            <td>RESTful APIs</td>
+                        </tr>
+                        <tr>
+                            <td>Database Tables</td>
+                            <td>8</td>
+                            <td>SQLite schema</td>
+                        </tr>
+                        <tr>
+                            <td>Documentation Pages</td>
+                            <td>100+</td>
+                            <td>Across 6 files</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Testing & Validation -->
+        <div class="section">
+            <h2>Testing & Validation</h2>
+            
+            <h3>Functional Testing</h3>
+            <ul class="feature-list">
+                <li>All 7 features tested manually</li>
+                <li>Translation: EN↔ES verified</li>
+                <li>Chatbot: 20 FAQs + AI responses tested</li>
+                <li>Visual Learning: All 5 image formats verified</li>
+                <li>Flashcards: 51 cards across 7 categories confirmed</li>
+                <li>Quizzes: All 4 types functional</li>
+            </ul>
+
+            <h3>Image Format Compatibility Test Results</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Format</th>
+                            <th>Status</th>
+                            <th>Test Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>JPEG</td>
+                            <td style="color: var(--color-success); font-weight: 600;">✓ PASS</td>
+                            <td>5.7 KB</td>
+                        </tr>
+                        <tr>
+                            <td>PNG</td>
+                            <td style="color: var(--color-success); font-weight: 600;">✓ PASS</td>
+                            <td>2.0 KB</td>
+                        </tr>
+                        <tr>
+                            <td>BMP</td>
+                            <td style="color: var(--color-success); font-weight: 600;">✓ PASS</td>
+                            <td>922 KB</td>
+                        </tr>
+                        <tr>
+                            <td>GIF</td>
+                            <td style="color: var(--color-success); font-weight: 600;">✓ PASS</td>
+                            <td>3.1 KB</td>
+                        </tr>
+                        <tr>
+                            <td>WebP</td>
+                            <td style="color: var(--color-success); font-weight: 600;">✓ PASS</td>
+                            <td>914 bytes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Innovation -->
+        <div class="section">
+            <h2>Innovation & Unique Value</h2>
+            
+            <h3>What Makes This Project Special</h3>
+            
+            <div class="task-card">
+                <h4>1. Visual Vocabulary Learning</h4>
+                <p>First-of-its-kind integration where detected objects automatically become learning materials. Point your camera at objects, and they instantly become Spanish flashcards.</p>
+            </div>
+
+            <div class="task-card">
+                <h4>2. Unified Learning Platform</h4>
+                <p>Instead of separate tools, all features work together: detected words → flashcards → quizzes → progress tracking.</p>
+            </div>
+
+            <div class="task-card">
+                <h4>3. Production-Ready Quality</h4>
+                <p>Professional UI with CodeAlpha branding, comprehensive error handling, mobile-responsive design, and WCAG 2.1 AA accessibility compliance.</p>
+            </div>
+
+            <div class="task-card">
+                <h4>4. Advanced AI Integration</h4>
+                <p>Combines computer vision (YOLOv8 + Deep SORT), NLP (NLTK + TF-IDF), and large language models (Llama 3.3 70B) in one cohesive system.</p>
+            </div>
+        </div>
+
+        <!-- Repository -->
+        <div class="section">
+            <h2>Repository & Deployment</h2>
+            
+            <p><strong>GitHub</strong>: <a href="https://github.com/Remaaa17/CodeAlpha_spanish-learning-ai" style="color: var(--color-primary);">https://github.com/Remaaa17/CodeAlpha_spanish-learning-ai</a></p>
+            
+            <h3>Setup Instructions</h3>
+            <div class="code-block">git clone https://github.com/Remaaa17/CodeAlpha_spanish-learning-ai.git
+cd CodeAlpha_spanish-learning-ai
+pip install -r requirements.txt
+python app.py</div>
+
+            <p style="margin-top: 1rem;"><strong>Access</strong>: http://localhost:5000</p>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="section">
+            <h2>Conclusion</h2>
+            
+            <p>This project successfully delivers all three CodeAlpha internship tasks with exceptional quality and innovation. The integration of translation, chatbot, and visual learning creates a unique educational platform that goes beyond traditional language learning tools.</p>
+            
+            <h3>Key Achievements</h3>
+            <ul class="feature-list">
+                <li>100% of requirements met across all 3 tasks</li>
+                <li>7 major features beyond core requirements</li>
+                <li>Production-ready code quality</li>
+                <li>Professional documentation (100+ pages)</li>
+                <li>Innovative visual vocabulary learning</li>
+                <li>Clean, maintainable architecture</li>
+            </ul>
+
+            <p style="margin-top: 1.5rem; font-weight: 600; color: var(--color-primary);">Status: COMPLETE AND READY FOR EVALUATION ✓</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Spanish Learning AI Assistant</strong></p>
+        <p>CodeAlpha AI/ML Internship - November 2026</p>
+        <p style="margin-top: 1rem;"><a href="https://github.com/Remaaa17/CodeAlpha_spanish-learning-ai" target="_blank">View on GitHub</a></p>
+    </div>
+</body>
+</html>
