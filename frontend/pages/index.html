@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Learning AI Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="160" height="50" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
+                        <!-- Globe with hexagonal pattern -->
+                        <g id="globe">
+                            <circle cx="30" cy="30" r="28" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+                            <!-- Hexagonal dots pattern -->
+                            <circle cx="18" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="24" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="30" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="36" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="42" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="15" cy="26" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="21" cy="26" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="27" cy="26" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="33" cy="26" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="39" cy="26" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="45" cy="26" r="2.5" fill="currentColor" opacity="0.8"/>
+                            <circle cx="12" cy="32" r="2.5" fill="currentColor" opacity="0.7"/>
+                            <circle cx="18" cy="32" r="2.5" fill="currentColor" opacity="0.8"/>
+                            <circle cx="24" cy="32" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="30" cy="32" r="2.5" fill="currentColor"/>
+                            <circle cx="36" cy="32" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="42" cy="32" r="2.5" fill="currentColor" opacity="0.8"/>
+                            <circle cx="48" cy="32" r="2" fill="currentColor" opacity="0.5"/>
+                            <circle cx="15" cy="38" r="2.5" fill="currentColor" opacity="0.6"/>
+                            <circle cx="21" cy="38" r="2.5" fill="currentColor" opacity="0.7"/>
+                            <circle cx="27" cy="38" r="2.5" fill="currentColor" opacity="0.8"/>
+                            <circle cx="33" cy="38" r="2.5" fill="currentColor" opacity="0.8"/>
+                            <circle cx="39" cy="38" r="2.5" fill="currentColor" opacity="0.7"/>
+                            <circle cx="45" cy="38" r="2" fill="currentColor" opacity="0.4"/>
+                            <circle cx="18" cy="44" r="2" fill="currentColor" opacity="0.4"/>
+                            <circle cx="24" cy="44" r="2" fill="currentColor" opacity="0.5"/>
+                            <circle cx="30" cy="44" r="2.5" fill="currentColor" opacity="0.6"/>
+                            <circle cx="36" cy="44" r="2" fill="currentColor" opacity="0.5"/>
+                            <circle cx="42" cy="44" r="2" fill="currentColor" opacity="0.3"/>
+                        </g>
+                        <!-- CODE text -->
+                        <text x="65" y="42" font-family="Arial, sans-serif" font-weight="bold" font-size="32" fill="currentColor">CODE</text>
+                        <!-- ALPHA text -->
+                        <text x="65" y="52" font-family="Arial, sans-serif" font-weight="600" font-size="14" fill="#1e293b" letter-spacing="2">ALPHA</text>
+                        <!-- Decorative lines -->
+                        <line x1="65" y1="54" x2="90" y2="54" stroke="currentColor" stroke-width="2"/>
+                        <line x1="155" y1="54" x2="180" y2="54" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <div class="logo-text">
+                        <h1>Spanish Learning AI</h1>
+                        <span class="subtitle">AI-Powered Language Learning</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="tab-navigation">
+            <button class="tab-button active" onclick="switchTab('translator')" aria-label="Translator">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12h20M12 2l-4 10-4 10M18 2l-4 10"></path>
+                </svg>
+                <span>Translator</span>
+            </button>
+            <button class="tab-button" onclick="switchTab('chatbot')" aria-label="Chatbot">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Chatbot</span>
+            </button>
+            <button class="tab-button" onclick="switchTab('flashcards')" aria-label="Flashcards">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    <path d="M9 12h6"></path>
+                </svg>
+                <span>Flashcards</span>
+            </button>
+            <button class="tab-button" onclick="switchTab('quiz')" aria-label="Quiz">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                <span>Quiz</span>
+            </button>
+            <button class="tab-button" onclick="switchTab('paths')" aria-label="Learning Paths">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>Paths</span>
+            </button>
+            <button class="tab-button" onclick="switchTab('visual')" aria-label="Visual Learning">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+                <span>Visual</span>
+            </button>
+            <button class="tab-button" onclick="switchTab('profile')" aria-label="Profile">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Profile</span>
+            </button>
+        </nav>
+
+        <!-- Translator Tab -->
+        <div id="translator" class="content active">
+            <div class="section-header">
+                <h2>Language Translator</h2>
+                <p class="section-subtitle">Real-time bidirectional translation</p>
+            </div>
+            
+            <div class="language-selector">
+                <div class="language-control">
+                    <label class="control-label">From</label>
+                    <select id="sourceLang" class="lang-select">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                    </select>
+                </div>
+                
+                <button class="swap-button" onclick="swapLanguages()" aria-label="Swap languages">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 16V4M7 4L3 8M7 4l4 4"></path>
+                        <path d="M17 8v12m0 0l4-4m-4 4l-4-4"></path>
+                    </svg>
+                </button>
+                
+                <div class="language-control">
+                    <label class="control-label">To</label>
+                    <select id="targetLang" class="lang-select">
+                        <option value="es" selected>Spanish</option>
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="translation-area">
+                <div class="input-section">
+                    <label class="field-label">Source Text</label>
+                    <textarea id="sourceText" rows="8" placeholder="Enter text to translate..."></textarea>
+                    <div class="char-count" id="charCount">0 characters</div>
+                </div>
+
+                <div class="output-section">
+                    <label class="field-label">Translation</label>
+                    <div id="translatedText" class="translation-box">
+                        <p class="placeholder">Translation will appear here</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="translatorError" class="error-message" style="display: none;"></div>
+
+            <div class="action-buttons">
+                <button onclick="translateText()" class="btn btn-primary">
+                    Translate
+                </button>
+                <button onclick="copyTranslation()" class="btn btn-secondary" id="copyBtn" style="display: none;">
+                    Copy Result
+                </button>
+                <button onclick="speakTranslation()" class="btn btn-secondary" id="speakBtn" style="display: none;">
+                    Listen
+                </button>
+                <button onclick="clearTranslation()" class="btn btn-tertiary">
+                    Clear All
+                </button>
+            </div>
+        </div>
+
+        <!-- Chatbot Tab -->
+        <div id="chatbot" class="content">
+            <div class="section-header">
+                <h2>AI Learning Assistant</h2>
+                <p class="section-subtitle">Natural language processing with contextual responses</p>
+            </div>
+
+            <div class="quick-questions">
+                <p class="quick-label">Suggested Topics</p>
+                <div class="quick-buttons">
+                    <button onclick="askQuestion('How do I start learning Spanish?')" class="quick-btn">
+                        Getting Started
+                    </button>
+                    <button onclick="askQuestion('What are Spanish verb conjugations?')" class="quick-btn">
+                        Verb Conjugations
+                    </button>
+                    <button onclick="askQuestion('How to pronounce Spanish words?')" class="quick-btn">
+                        Pronunciation Guide
+                    </button>
+                    <button onclick="askQuestion('Difference between ser and estar')" class="quick-btn">
+                        Ser vs Estar
+                    </button>
+                    <button onclick="askQuestion('Common Spanish phrases')" class="quick-btn">
+                        Common Phrases
+                    </button>
+                </div>
+            </div>
+
+            <div id="chatMessages" class="chat-messages">
+                <div class="message bot">
+                    <div class="message-bubble">
+                        <strong>Assistant:</strong> Hello! I'm your Spanish learning assistant powered by AI and natural language processing. Ask me anything about learning Spanish.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <textarea id="userMessage" rows="2" placeholder="Type your question about Spanish language learning..." onkeypress="handleKeyPress(event)"></textarea>
+                <button onclick="sendMessage()" class="send-button" id="sendBtn">
+                    Send Message
+                </button>
+            </div>
+        </div>
+
+        <!-- Flashcards Tab -->
+        <div id="flashcards" class="content">
+            <div class="section-header">
+                <h2>Flashcard Practice</h2>
+                <p class="section-subtitle">Spaced repetition learning system</p>
+            </div>
+
+            <div class="flashcard-categories">
+                <button onclick="loadFlashcards('all')" class="category-btn active">All Categories</button>
+                <button onclick="loadFlashcards('greetings')" class="category-btn">Greetings</button>
+                <button onclick="loadFlashcards('verbs')" class="category-btn">Verbs</button>
+                <button onclick="loadFlashcards('numbers')" class="category-btn">Numbers</button>
+                <button onclick="loadFlashcards('food')" class="category-btn">Food</button>
+                <button onclick="loadFlashcards('colors')" class="category-btn">Colors</button>
+                <button onclick="loadFlashcards('family')" class="category-btn">Family</button>
+                <button onclick="loadFlashcards('phrases')" class="category-btn">Phrases</button>
+            </div>
+
+            <div class="flashcard-stats-bar">
+                <div class="stat-item">
+                    <span class="stat-label">Cards Studied</span>
+                    <strong class="stat-value" id="cardsStudied">0</strong>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Mastered</span>
+                    <strong class="stat-value" id="cardsMastered">0</strong>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Due Today</span>
+                    <strong class="stat-value" id="cardsDue">0</strong>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Accuracy</span>
+                    <strong class="stat-value" id="accuracy">0%</strong>
+                </div>
+            </div>
+
+            <div id="flashcardDisplay" class="flashcard-display" style="display:none;">
+                <div class="card-counter">
+                    Card <span id="currentCard">1</span> of <span id="totalCards">10</span>
+                </div>
+                
+                <div class="flashcard" id="card" onclick="flipCard()">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-content">
+                                <h3 id="cardFront">Click to start</h3>
+                                <p class="card-hint">Click or tap to reveal answer</p>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-content">
+                                <h3 id="cardBack">Back</h3>
+                                <p id="cardExample" class="card-example"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-controls">
+                    <button onclick="reviewCard(false)" class="btn-review btn-wrong">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                        Need Review
+                    </button>
+                    <button onclick="skipCard()" class="btn-review btn-skip">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                            <line x1="19" y1="5" x2="19" y2="19"></line>
+                        </svg>
+                        Skip
+                    </button>
+                    <button onclick="reviewCard(true)" class="btn-review btn-correct">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="9 12 11 14 15 10"></polyline>
+                        </svg>
+                        I Know It
+                    </button>
+                </div>
+            </div>
+
+            <div id="flashcardStart" class="flashcard-start">
+                <h3>Ready to Practice?</h3>
+                <p>Select a category above or begin with all available flashcards</p>
+                <button onclick="startFlashcardPractice()" class="btn btn-primary btn-large">
+                    Start Practice Session
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Tab -->
+        <div id="quiz" class="content">
+            <div class="section-header">
+                <h2>Spanish Quiz</h2>
+                <p class="section-subtitle">Test your knowledge across multiple quiz types</p>
+            </div>
+
+            <!-- Quiz Selection -->
+            <div id="quizSelection" class="quiz-selection">
+                <div class="quiz-type-grid">
+                    <div class="quiz-type-card" onclick="selectQuizType('vocabulary')">
+                        <div class="quiz-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                        </div>
+                        <h3>Vocabulary Quiz</h3>
+                        <p>Test your Spanish vocabulary knowledge</p>
+                    </div>
+                    <div class="quiz-type-card" onclick="selectQuizType('conjugation')">
+                        <div class="quiz-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                                <path d="M2 2l7.586 7.586"></path>
+                                <circle cx="11" cy="11" r="2"></circle>
+                            </svg>
+                        </div>
+                        <h3>Conjugation Quiz</h3>
+                        <p>Practice verb conjugations</p>
+                    </div>
+                    <div class="quiz-type-card" onclick="selectQuizType('translation')">
+                        <div class="quiz-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="17 1 21 5 17 9"></polyline>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                <polyline points="7 23 3 19 7 15"></polyline>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                            </svg>
+                        </div>
+                        <h3>Translation Quiz</h3>
+                        <p>Translate words and phrases</p>
+                    </div>
+                    <div class="quiz-type-card" onclick="selectQuizType('grammar')">
+                        <div class="quiz-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Grammar Quiz</h3>
+                        <p>Test grammar rules</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Playing -->
+            <div id="quizPlaying" class="quiz-playing" style="display:none;">
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" id="quizProgressFill"></div>
+                </div>
+                <div class="quiz-question-counter">
+                    Question <span id="quizCurrentQ">1</span> of <span id="quizTotalQ">10</span>
+                </div>
+                
+                <div class="quiz-question">
+                    <h3 id="quizQuestion">Question text here</h3>
+                </div>
+
+                <div class="quiz-options" id="quizOptions">
+                    <!-- Options will be inserted here -->
+                </div>
+
+                <div class="quiz-navigation">
+                    <button onclick="nextQuestion()" class="btn btn-primary" id="nextBtn" disabled>
+                        Next Question
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Results -->
+            <div id="quizResults" class="quiz-results" style="display:none;">
+                <div class="results-header">
+                    <h2>Quiz Complete</h2>
+                    <div class="score-circle">
+                        <div class="score-value" id="quizScore">0</div>
+                        <div class="score-label">Score</div>
+                    </div>
+                </div>
+
+                <div class="results-feedback" id="quizFeedback">
+                    Excellent work!
+                </div>
+
+                <div class="results-details">
+                    <div class="result-stat">
+                        <span>Correct</span>
+                        <strong id="quizCorrect">0</strong>
+                    </div>
+                    <div class="result-stat">
+                        <span>Incorrect</span>
+                        <strong id="quizIncorrect">0</strong>
+                    </div>
+                    <div class="result-stat">
+                        <span>Percentage</span>
+                        <strong id="quizPercentage">0%</strong>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button onclick="retakeQuiz()" class="btn btn-primary">
+                        Retry Quiz
+                    </button>
+                    <button onclick="backToQuizSelection()" class="btn btn-secondary">
+                        Back to Selection
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Paths Tab -->
+        <div id="paths" class="content">
+            <div class="section-header">
+                <h2>Learning Paths</h2>
+                <p class="section-subtitle">Structured curriculum for progressive Spanish learning</p>
+            </div>
+
+            <div class="path-cards">
+                <div class="path-card" onclick="selectPath('beginner')">
+                    <div class="path-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Beginner Path</h3>
+                    <p>Start your Spanish journey from the basics</p>
+                    <div class="path-info">
+                        <span>10 lessons</span>
+                        <span class="path-separator">•</span>
+                        <span>8 weeks</span>
+                    </div>
+                    <div class="path-progress-bar">
+                        <div class="path-progress-fill" id="beginnerProgress" style="width: 0%"></div>
+                    </div>
+                    <p class="progress-text"><span id="beginnerPercent">0</span>% Complete</p>
+                </div>
+
+                <div class="path-card" onclick="selectPath('intermediate')">
+                    <div class="path-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Intermediate Path</h3>
+                    <p>Build on your foundation with advanced concepts</p>
+                    <div class="path-info">
+                        <span>8 lessons</span>
+                        <span class="path-separator">•</span>
+                        <span>12 weeks</span>
+                    </div>
+                    <div class="path-progress-bar">
+                        <div class="path-progress-fill" id="intermediateProgress" style="width: 0%"></div>
+                    </div>
+                    <p class="progress-text"><span id="intermediatePercent">0</span>% Complete</p>
+                </div>
+
+                <div class="path-card" onclick="selectPath('advanced')">
+                    <div class="path-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Advanced Path</h3>
+                    <p>Achieve fluency and master complex topics</p>
+                    <div class="path-info">
+                        <span>5 lessons</span>
+                        <span class="path-separator">•</span>
+                        <span>16 weeks</span>
+                    </div>
+                    <div class="path-progress-bar">
+                        <div class="path-progress-fill" id="advancedProgress" style="width: 0%"></div>
+                    </div>
+                    <p class="progress-text"><span id="advancedPercent">0</span>% Complete</p>
+                </div>
+            </div>
+
+            <div id="pathLessons" class="path-lessons" style="display:none;">
+                <button onclick="backToPathSelection()" class="btn btn-secondary mb-3">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back to Paths
+                </button>
+                
+                <h3 id="pathTitle">Beginner Path</h3>
+                <div id="lessonsList" class="lessons-list">
+                    <!-- Lessons will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Learning Tab -->
+        <div id="visual" class="content">
+            <div class="section-header">
+                <h2>Visual Spanish Learning</h2>
+                <p class="section-subtitle">Learn vocabulary through real-time object detection</p>
+            </div>
+
+            <div class="visual-info-banner">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <div>
+                    <strong>How it works:</strong> Use your webcam or upload images to detect objects. Each object is automatically translated to Spanish and can be added to your flashcards!
+                </div>
+            </div>
+
+            <div class="visual-controls">
+                <button class="btn-primary" onclick="startWebcam()" id="startWebcamBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    Start Webcam
+                </button>
+                <button class="btn-secondary" onclick="stopWebcam()" id="stopWebcamBtn" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                    </svg>
+                    Stop Webcam
+                </button>
+                <button class="btn-secondary" onclick="captureFrame()" id="captureBtn" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Detect Objects
+                </button>
+                <button class="btn-secondary" onclick="uploadImage()" id="uploadBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Upload Image
+                </button>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="processUploadedImage()">
+            </div>
+
+            <div class="visual-main">
+                <div class="video-container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas id="webcamCanvas" style="display: none;"></canvas>
+                    <img id="detectionResult" style="display: none;" />
+                    <div id="videoPlaceholder" class="video-placeholder">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        <p>Click "Start Webcam" or "Upload Image" to begin</p>
+                    </div>
+                </div>
+
+                <div class="detection-panel">
+                    <h3>Detection Info</h3>
+                    <div class="detection-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Objects Detected:</span>
+                            <span class="stat-value" id="objectCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Unique Words:</span>
+                            <span class="stat-value" id="uniqueWords">0</span>
+                        </div>
+                    </div>
+
+                    <h4>Detected Objects</h4>
+                    <div class="detected-objects-list" id="detectedObjectsList">
+                        <p class="placeholder-text">No objects detected yet</p>
+                    </div>
+
+                    <div class="visual-actions">
+                        <button class="btn-success" onclick="saveToFlashcards()" id="saveFlashcardsBtn" disabled>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                <polyline points="7 3 7 8 15 8"></polyline>
+                            </svg>
+                            Save to Flashcards
+                        </button>
+                        <button class="btn-secondary" onclick="clearSession()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="1 4 1 10 7 10"></polyline>
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                            </svg>
+                            Clear Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vocabulary-section">
+                <h3>Session Vocabulary</h3>
+                <div class="vocabulary-grid" id="vocabularyGrid">
+                    <p class="placeholder-text">Start detecting objects to build your vocabulary list</p>
+                </div>
+            </div>
+
+            <div class="visual-features">
+                <div class="feature-card">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                        <polyline points="17 2 12 7 7 2"></polyline>
+                    </svg>
+                    <h4>YOLOv8 Detection</h4>
+                    <p>State-of-the-art real-time object detection</p>
+                </div>
+                <div class="feature-card">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <h4>Deep SORT Tracking</h4>
+                    <p>Multi-object tracking with unique IDs</p>
+                </div>
+                <div class="feature-card">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 12h20M12 2l-4 10-4 10M18 2l-4 10"></path>
+                    </svg>
+                    <h4>Auto Translation</h4>
+                    <p>Instant Spanish translation for all detected objects</p>
+                </div>
+                <div class="feature-card">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                        <path d="M9 12h6"></path>
+                    </svg>
+                    <h4>Flashcard Integration</h4>
+                    <p>Save detected vocabulary to your flashcard deck</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profile" class="content">
+            <div class="section-header">
+                <h2>Your Profile</h2>
+                <p class="section-subtitle">Track your progress and achievements</p>
+            </div>
+
+            <div class="profile-stats-grid">
+                <div class="profile-stat-card">
+                    <div class="stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <div class="stat-value" id="profilePoints">0</div>
+                    <div class="stat-label">Points</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-value" id="profileLevel">1</div>
+                    <div class="stat-label">Level</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-value" id="profileStreak">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="7"></circle>
+                            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                        </svg>
+                    </div>
+                    <div class="stat-value" id="profileBadges">0</div>
+                    <div class="stat-label">Badges</div>
+                </div>
+            </div>
+
+            <div class="level-progress">
+                <h3>Level Progress</h3>
+                <div class="level-bar">
+                    <div class="level-fill" id="levelFill" style="width: 0%"></div>
+                </div>
+                <p id="levelText">0 / 100 XP to next level</p>
+            </div>
+
+            <div class="badges-section">
+                <h3>Achievements</h3>
+                <div class="badges-grid" id="badgesGrid">
+                    <!-- Badges will be inserted here -->
+                </div>
+            </div>
+
+            <div class="leaderboard-section">
+                <h3>Leaderboard</h3>
+                <div class="leaderboard-list" id="leaderboardList">
+                    <!-- Leaderboard will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="footer-branding">
+                    <svg width="120" height="40" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="footer-logo">
+                        <g id="globe">
+                            <circle cx="30" cy="30" r="28" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+                            <circle cx="18" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="24" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="30" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="36" cy="20" r="2.5" fill="currentColor"/>
+                            <circle cx="15" cy="26" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="21" cy="26" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="27" cy="26" r="2.5" fill="currentColor" opacity="0.9"/>
+                            <circle cx="30" cy="32" r="2.5" fill="currentColor"/>
+                            <circle cx="27" cy="38" r="2.5" fill="currentColor" opacity="0.8"/>
+                            <circle cx="30" cy="44" r="2" fill="currentColor" opacity="0.6"/>
+                        </g>
+                        <text x="65" y="38" font-family="Arial, sans-serif" font-weight="bold" font-size="24" fill="currentColor">CODE</text>
+                        <text x="65" y="48" font-family="Arial, sans-serif" font-weight="600" font-size="10" fill="currentColor" opacity="0.7" letter-spacing="2">ALPHA</text>
+                    </svg>
+                    <p class="footer-tagline">Innovating AI Solutions</p>
+                </div>
+                <div class="footer-tech">
+                    <p>Powered by <strong>Python</strong>, <strong>Flask</strong>, <strong>Groq AI</strong>, <strong>NLTK</strong> & <strong>scikit-learn</strong></p>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2026 CodeAlpha Internship Project | Spanish Learning AI Assistant</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
